@@ -45,6 +45,7 @@ class OfferCreateDataCollector():
         row_entry.update({
             'Transaction_Hash': txn['hash'],
             'Transaction_Fee': txn['Fee'],
+            'Result': txn['meta']['TransactionResult'],
             'Account_ID': txn['Account'],
 
             'Gets_Currency_Code': txn['TakerGets']['currency'],
@@ -54,6 +55,7 @@ class OfferCreateDataCollector():
             'Pays_Currency_Code': txn['TakerPays']['currency'],
             'Pays_Count': txn['TakerPays']['value'],
             'Pays_Currency_Issuer': txn['TakerPays'].get('issuer', None)
+
         })
 
         return row_entry
