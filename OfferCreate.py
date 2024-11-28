@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+import datetime as dt
 
 
 class OfferCreateDataCollector():
@@ -7,31 +8,31 @@ class OfferCreateDataCollector():
         self.base_url = 'https://api.xrpscan.com/api/v1'
         self.headers = {
             'Authorization': '',
-            'User-Agent': 'OfferCreateCollection/0.0.1',
+            'User-Agent': 'OfferCreateCollection/0.0.2',
         }
 
 
     def get_data(self, ledger_number):
-
         endpoint = f'/ledgers/{ledger_number}/transactions'
         url = self.base_url + endpoint
 
-        
         ledger_entries = []
         row_base = {'Ledger_Number': ledger_number}
 
         try:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
-
-            for txn in response.json():
+            response = response.json()
+    
+            for txn in response:
                 if txn['TransactionType'] == 'OfferCreate':
-                    row_entry = self._parse_transaction(txn, row_base)
+                    row_entry = self._parse_txn(txn, row_base)
                     ledger_entries.append(row_entry)
 
 
-        except:
-            row_base['Error'] = Exception
+        except Exception as e:
+            print(e)
+            row_base['Error'] = e
             ledger_entries.append(row_base)
         
         return ledger_entries
@@ -48,11 +49,11 @@ class OfferCreateDataCollector():
 
             'Gets_Currency_Code': txn['TakerGets']['currency'],
             'Gets_Count': txn['TakerGets']['value'],
-            'Gets_Currency_Issuer':txn['TakerGets'].get('issuer', None),
+            'Gets_Currency_Issuer': txn['TakerGets'].get('issuer', None),
 
             'Pays_Currency_Code': txn['TakerPays']['currency'],
             'Pays_Count': txn['TakerPays']['value'],
-            'Pays_Currency_Issuer':txn['TakerPayers'].get('issuer', None)
+            'Pays_Currency_Issuer': txn['TakerPays'].get('issuer', None)
         })
 
         return row_entry
@@ -65,11 +66,26 @@ class OfferCreateDataCollector():
 
 if __name__ == '__main__':
     collector = OfferCreateDataCollector()
+    start_time = dt.datetime.now()
+    
 
     newest_ledger = 92399495
-    desired_data_points = 5
+    data_points = 1000
 
+    print('Begin Data Collection')
     final_data = []
-    for i in range(desired_data_points):
-        ledger_data = collector.get_data(newest_ledger - i)
+    j = 0
+    for i in range(data_points):
+        delta = i*30000
+        ledger_data = collector.get_data(newest_ledger - delta)
         final_data.extend(ledger_data)
+
+        j+=1
+        print(f'Completed {j}/{data_points}')
+
+    print('Save to CSV')
+    collector.save_data(final_data)
+
+    end_time = dt.datetime.now()
+    print(f'Runtime: {end_time - start_time}')
+    print('Data Collection Complete')
