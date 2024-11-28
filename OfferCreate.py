@@ -43,6 +43,7 @@ class OfferCreateDataCollector():
         row_entry = row_base.copy()
 
         row_entry.update({
+            'Ledger_Date': txn['date'],
             'Transaction_Hash': txn['hash'],
             'Transaction_Fee': txn['Fee'],
             'Result': txn['meta']['TransactionResult'],
@@ -55,7 +56,6 @@ class OfferCreateDataCollector():
             'Pays_Currency_Code': txn['TakerPays']['currency'],
             'Pays_Count': txn['TakerPays']['value'],
             'Pays_Currency_Issuer': txn['TakerPays'].get('issuer', None)
-
         })
 
         return row_entry
@@ -76,13 +76,13 @@ if __name__ == '__main__':
     
 
     newest_ledger = 92399495
-    data_points = 10000
+    data_points = 100000
 
     print('Begin Data Collection')
     final_data = []
     j = 0
     for i in range(data_points):
-        delta = i*3000
+        delta = i*500
         ledger_data = collector.get_data(newest_ledger - delta)
         final_data.extend(ledger_data)
 
