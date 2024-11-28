@@ -60,9 +60,13 @@ class OfferCreateDataCollector():
 
         return row_entry
     
-    def save_data(self, data):
+    def csv_filename(self, addition):
+        today = dt.datetime.now().strftime('%Y-%m-%d')
+        return f'{addition}_{today}.csv'
+
+    def save_data(self, data, filename):
         df = pd.DataFrame(data)
-        df.to_csv('OfferCreateData.csv', index=False)
+        df.to_csv(filename, index=False)
 
 
 
@@ -72,13 +76,13 @@ if __name__ == '__main__':
     
 
     newest_ledger = 92399495
-    data_points = 1000
+    data_points = 10000
 
     print('Begin Data Collection')
     final_data = []
     j = 0
     for i in range(data_points):
-        delta = i*30000
+        delta = i*3000
         ledger_data = collector.get_data(newest_ledger - delta)
         final_data.extend(ledger_data)
 
@@ -86,7 +90,8 @@ if __name__ == '__main__':
         print(f'Completed {j}/{data_points}')
 
     print('Save to CSV')
-    collector.save_data(final_data)
+    filename = collector.csv_filename('Offer_Create')
+    collector.save_data(final_data, filename)
 
     end_time = dt.datetime.now()
     print(f'Runtime: {end_time - start_time}')
