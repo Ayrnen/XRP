@@ -16,7 +16,7 @@ class TableTransformer():
         return result
 
     def ledger_metadata(self):
-        result = self.df.groupby('Ledger_Number').agg(
+        result = self.df.groupby('Ledger_Number', 'Ledger_Date').agg(
             Row_Count=('Transaction_Hash', 'count'),
             Transaction_Fee_med=('Transaction_Fee', 'median'),
             Transaction_Fee_avg=('Transaction_Fee', 'mean'),
@@ -27,7 +27,7 @@ class TableTransformer():
         return result.reset_index()
     
     def ledger_account_metadata(self):
-        result = self.df.groupby(['Ledger_Number', 'Account_ID']).agg(
+        result = self.df.groupby(['Ledger_Number', 'Ledger_Date', 'Account_ID']).agg(
             Row_Count=('Transaction_Hash', 'count'),
             Transaction_Fee_med=('Transaction_Fee', 'median'),
             Transaction_Fee_avg=('Transaction_Fee', 'mean'),
@@ -38,7 +38,7 @@ class TableTransformer():
         return result.reset_index()
 
     def ledger_currency_pairs(self):
-        result = self.df.groupby(['Ledger_Number', 'Gets_Currency_Code', 'Pays_Currency_Code']).agg(
+        result = self.df.groupby(['Ledger_Number', 'Ledger_Date', 'Gets_Currency_Code', 'Pays_Currency_Code']).agg(
 
             Row_Count=('Transaction_Hash', 'count'),
 
@@ -88,7 +88,7 @@ class TableTransformer():
         return result.reset_index()
     
     def ledger_account_currency_pairs(self):
-        result = self.df.groupby(['Ledger_Number', 'Account_ID', 'Gets_Currency_Code', 'Pays_Currency_Code']).agg(
+        result = self.df.groupby(['Ledger_Number', 'Ledger_Date', 'Account_ID', 'Gets_Currency_Code', 'Pays_Currency_Code']).agg(
 
             Row_Count=('Transaction_Hash', 'count'),
 
