@@ -122,26 +122,32 @@ if __name__ == '__main__':
     transformer = TableTransformer()
     start_time = dt.datetime.now()
     
+    print('Currency Mapper')
     df = transformer.currency_mapper()
     filename = transformer.csv_filename('Currency_Mapping')
     df.to_csv(filename, index=False)
 
+    print('Ledger Metadata')
     df = transformer.ledger_metadata()
     filename = transformer.csv_filename('Ledger_Metadata')
     df.to_csv(filename, index=False)
 
+    print('Ledger/Account Metadata')
     df = transformer.ledger_account_metadata()
     filename = transformer.csv_filename('Ledger_Account_Metadata')
     df.to_csv(filename, index=False)
 
+    print('Ledger Currency Pairs')
     df = transformer.ledger_currency_pairs()
     filename = transformer.csv_filename('Ledger_Currency_Pairs')
     df.to_csv(filename, index=False)
 
+    print('Account Currency Pairs')
     df = transformer.account_currency_pairs()
     filename = transformer.csv_filename('Account_Currency_Pairs')
     df.to_csv(filename, index=False)
 
+    print('Ledger/Account Currency Pairs')
     df = transformer.ledger_currency_pairs()
     filename = transformer.csv_filename('Ledger_Account_Currency_Pairs')
     df.to_csv(filename, index=False)
