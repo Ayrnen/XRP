@@ -76,22 +76,25 @@ if __name__ == '__main__':
     
 
     newest_ledger = 92399495
-    data_points = 100000
+    data_points = 50000
 
     print('Begin Data Collection')
-    final_data = []
-    j = 0
-    for i in range(data_points):
-        delta = i*500
-        ledger_data = collector.get_data(newest_ledger - delta)
-        final_data.extend(ledger_data)
+    try:
+        final_data = []
+        j = 0
+        for i in range(data_points):
+            delta = i*500
+            ledger_data = collector.get_data(newest_ledger - delta)
+            final_data.extend(ledger_data)
 
-        j+=1
-        print(f'Completed {j}/{data_points}')
+            j+=1
+            print(f'Completed {j}/{data_points}')
 
-    print('Save to CSV')
-    filename = collector.csv_filename('Offer_Create')
-    collector.save_data(final_data, filename)
+        print('Save to CSV')
+        filename = collector.csv_filename('Offer_Create')
+        collector.save_data(final_data, filename)
+    except Exception as e:
+        print(e)
 
     end_time = dt.datetime.now()
     print(f'Runtime: {end_time - start_time}')
