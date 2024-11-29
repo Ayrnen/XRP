@@ -3,7 +3,8 @@ import datetime as dt
 
 class TableTransformer():
     def __init__(self):
-        self.df = pd.read_csv('Offer_Create_2024-11-27.csv')
+        today = dt.datetime.now().strftime('%Y-%m-%d')
+        self.df = pd.read_csv(f'Offer_Create_{today}.csv')
         self.df = self.df[self.df['Result'] == 'tesSUCCESS']
 
     def currency_mapper(self):
@@ -16,7 +17,7 @@ class TableTransformer():
         return result
 
     def ledger_metadata(self):
-        result = self.df.groupby('Ledger_Number', 'Ledger_Date').agg(
+        result = self.df.groupby(['Ledger_Number', 'Ledger_Date']).agg(
             Row_Count=('Transaction_Hash', 'count'),
             Transaction_Fee_med=('Transaction_Fee', 'median'),
             Transaction_Fee_avg=('Transaction_Fee', 'mean'),
