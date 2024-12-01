@@ -47,7 +47,7 @@ class GeckoCollector:
     @staticmethod
     def csv_filename(addition):
         today = dt.datetime.now().strftime('%Y-%m-%d')
-        return f'{addition}_{today}.csv'
+        return f'/CSV_Files/{addition}_{today}.csv'
 
     @staticmethod
     def save_data(data, filename):
