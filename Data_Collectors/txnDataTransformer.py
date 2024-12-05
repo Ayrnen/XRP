@@ -142,7 +142,7 @@ if __name__ == '__main__':
     filename = transformer.csv_filename('Account_Currency_Pairs')
     df.to_csv(filename, index=False)
 
-    df = transformer.ledger_currency_pairs()
+    df = transformer.ledger_account_currency_pairs()
     filename = transformer.csv_filename('Ledger_Account_Currency_Pairs')
     df.to_csv(filename, index=False)
 
