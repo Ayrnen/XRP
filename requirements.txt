@@ -4,3 +4,4 @@ matplotlib
 scipy
 statsmodels
 scikit-learn
+xrpl-py
